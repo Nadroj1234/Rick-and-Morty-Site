@@ -13,7 +13,6 @@
     <style>
       .navBar {
         display: flex;
-        text-decoration: none;
       }
       .logo {
         width: 66px;
@@ -43,17 +42,58 @@
         padding: 10px;
         margin: 10px;
       }
+      .hero {
+        display: flex;
+        position: relative;
+      }
+      .heroImg {
+        height: 600px;
+        opacity: 20%;
+      }
+      .heroText {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-weight: 900;
+        font-size: 85px;
+        width: 1034px;
+      }
+
+      .mainContent {
+        background-color: rgb(39, 43, 51);
+        padding: 25px;
+        justify-content: center;
+        display: flex;
+      }
+      .firstRowCards {
+        justify-content: space-evenly;
+        margin: 10px;
+      }
+      .card-img-top {
+        width: 200px;
+      }
+      .card {
+        background-color: grey;
+        padding: 10px;
+      }
+      h5{
+        font-size: 25px;
+        font-weight: bold;
+        display: flex;
+      }
     </style>
   </head>
   <body>
     <header>
       <nav class="navBar">
         <div class="nav_img col-3">
-          <img
-            src="rick-and-morty-circle-decal-sticker-removebg-preview.png"
-            alt=""
-            class="logo"
-          />
+          <a href="#"
+            ><img
+              src="./imgs/rick-and-morty-circle-decal-sticker-removebg-preview.png"
+              alt=""
+              class="logo"
+          /></a>
         </div>
         <div class="listDiv col-9">
           <ul class="navList">
@@ -67,9 +107,30 @@
     <main>
       <div class="heroDiv">
         <div class="hero">
-          <img src="Original.webp" alt="" />
+          <img style="width: 100%" class="heroImg" src="./imgs/Original.webp" alt="" />
+          <h1 class="heroText">The Rick and Morty API</h1>
+        </div>
+      </div>
+      <div class="mainContent">
+        <div class="cards">
+            <div class="card col-md-4">
+              <img class="card-img-top characterImg" src="" alt="" />
+              <div class="card-body">
+                <h5 class="nameHead"></h5>
+                <p class="deadOrAlive"></p>
+                <h6 class="lastLocationHead"></h5>
+                <p class="lastLocation"></p>
+                <h6 class="firstLocationSeenHead"></h5>
+                <p class="firstLocationSeen"></p>
+              </div>
+            </div>
         </div>
       </div>
     </main>
+    <script>
+      function start() {
+        fetch("https://rickandmortyapi.com/api/location")
+      }
+    </script>
   </body>
 </html>
