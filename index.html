@@ -76,8 +76,9 @@
       .card {
         background-color: grey;
         padding: 10px;
+        width: 250px;
       }
-      h5{
+      h5 {
         font-size: 25px;
         font-weight: bold;
         display: flex;
@@ -107,38 +108,62 @@
     <main>
       <div class="heroDiv">
         <div class="hero">
-          <img style="width: 100%" class="heroImg" src="./imgs/Original.webp" alt="" />
+          <img
+            style="width: 100%"
+            class="heroImg"
+            src="./imgs/Original.webp"
+            alt=""
+          />
           <h1 class="heroText">The Rick and Morty API</h1>
         </div>
       </div>
       <div class="mainContent">
         <div class="cards">
-            <div class="card col-md-4">
-              <img class="card-img-top characterImg" src="" alt="" />
-              <div class="card-body">
-                <h5 class="nameHead"></h5>
-                <p class="deadOrAlive"></p>
-                <h6 class="lastLocationHead"></h5>
-                <p class="lastLocation"></p>
-                <h6 class="firstLocationSeenHead"></h5>
-                <p class="firstLocationSeen"></p>
-              </div>
+          <div class="card col-md-4">
+            <img class="card-img-top firstCardCharacterImg" src="" alt="" />
+            <div class="card-body">
+              <h5 class="firstCardNameHead"></h5>
+              <p class="firstCarddeadOrAlive"></p>
+              <h6 class="firstCardLastLocationHead">Last known Location</h6>
+              <p class="firstCardLastLocation"></p>
+              <h6 class="firstCardFirstLocationSeenHead">First Seen In</h6>
+              <p class="firstCardFirstLocationSeen"></p>
             </div>
+          </div>
         </div>
       </div>
     </main>
     <script>
+      const randomNumber = Math.floor(Math.random() * 42) + 1;
+
+      const apiUrl = `https://rickandmortyapi.com/api/character/${randomNumber}/`;
+
       function start() {
-        fetch("https://rickandmortyapi.com/api/character")
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-        })
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+            console.log(randomNumber);
+            document.querySelector(
+              ".firstCardCharacterImg"
+            ).src = `${data.image}`;
+
+            document.querySelector(
+              ".firstCardNameHead"
+            ).innerHTML = `${data.name}`;
+            document.querySelector(
+              ".firstCarddeadOrAlive"
+            ).innerHTML = `${data.status}  - ${data.species}`;
+            document.querySelector(
+              ".firstCardLastLocation"
+            ).innerHTML = `${data.location.name}`;
+            document.querySelector(
+              ".firstCardFirstLocationSeen"
+            ).innerHTML = `${data.origin.name}`;
+          });
       }
 
-      start()
-
-
+      start();
     </script>
   </body>
 </html>
