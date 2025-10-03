@@ -63,25 +63,31 @@
       .mainContent {
         background-color: rgb(39, 43, 51);
         padding: 25px;
-        justify-content: center;
-        display: flex;
-      }
-      .firstRowCards {
         justify-content: space-evenly;
-        margin: 10px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
       }
+
       .card-img-top {
         width: 200px;
       }
       .card {
-        background-color: grey;
+        background-color: rgb(61, 61, 61);
         padding: 10px;
-        width: 250px;
+        margin: 10px;
+        width: 450px;
       }
       h5 {
         font-size: 25px;
         font-weight: bold;
         display: flex;
+        text-decoration: none;
+      }
+
+      @media screen and (max-width: 768px) {
+        .mainContent {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
@@ -98,9 +104,30 @@
         </div>
         <div class="listDiv col-9">
           <ul class="navList">
-            <li class="navListItemDcs"><a href="#">Docs</a></li>
-            <li class="navListItemAbt"><a href="#">About</a></li>
-            <li class="navListItemSpt"><a href="#">SUPPORT US</a></li>
+            <li class="navListItemDcs"
+              ><a
+                href="https://rickandmortyapi.com/documentation"
+                target="_blank"
+                style="text-decoration: none; color: black"
+                >Docs</a
+              ></li
+            >
+            <li class="navListItemAbt"
+              ><a
+                href="https://rickandmortyapi.com/about"
+                target="_blank"
+                style="text-decoration: none; color: black"
+                >About</a
+              ></li
+            >
+            <li class="navListItemSpt"
+              ><a
+                href="https://rickandmortyapi.com/support-us"
+                target="_blank"
+                style="text-decoration: none; color: black"
+                >SUPPORT US</a
+              ></li
+            >
           </ul>
         </div>
       </nav>
@@ -117,50 +144,58 @@
           <h1 class="heroText">The Rick and Morty API</h1>
         </div>
       </div>
-      <div class="mainContent">
-        <div class="cards">
-          <div class="card col-md-4">
-            <img class="card-img-top firstCardCharacterImg" src="" alt="" />
-            <div class="card-body">
-              <h5 class="firstCardNameHead"></h5>
-              <p class="firstCarddeadOrAlive"></p>
-              <h6 class="firstCardLastLocationHead">Last known Location</h6>
-              <p class="firstCardLastLocation"></p>
-              <h6 class="firstCardFirstLocationSeenHead">First Seen In</h6>
-              <p class="firstCardFirstLocationSeen"></p>
+      <div class="mainContent"></div>
+    </main>
+    <script>
+      const mainContent = document.querySelector(".mainContent");
+
+      function getRandomCharacterId() {
+        return Math.floor(Math.random() * 826) + 1; // Rick and Morty API has ~826 characters
+      }
+
+      async function getCharacterData(id) {
+        const response = await fetch(
+          `https://rickandmortyapi.com/api/character/${id}`
+        );
+        return await response.json();
+      }
+
+      async function start() {
+        const characterPromises = [];
+
+        for (let i = 0; i < 6; i++) {
+          const randomId = getRandomCharacterId();
+          characterPromises.push(getCharacterData(randomId));
+        }
+
+        const characters = await Promise.all(characterPromises);
+
+        const cardsHTML = characters
+          .map((data) => {
+            console.log(data);
+            return `
+      <div class="cards"   >
+        <div class="card col-4"  >
+                
+          <div class="card-body" style="display: flex;">
+            <img class="card-img-top firstCardCharacterImg" src="${data.image}" alt="${data.name}" />
+            <div style="margin: 10px;"> 
+
+              <h5 class="CardNameHead"><a style = "text-decoration: none; color: white"  href="${data.url}" target="_blank"">${data.name}</a></h5>
+              <p class="CarddeadOrAlive" style = "color: white">${data.status} - ${data.species}</p>
+              <h6 class="CardLastLocationHead " style = "color:grey">Last known Location</h6>
+              <p class="CardLastLocation" style = "color: white">${data.location.name}</p>
+              <h6 class="CardFirstLocationSeenHead" style = "color:grey">First Seen In</h6>
+              <p class="CardFirstLocationSeen" style = "color: white">${data.origin.name}</p>
             </div>
           </div>
         </div>
       </div>
-    </main>
-    <script>
-      const randomNumber = Math.floor(Math.random() * 42) + 1;
+    `;
+          })
+          .join("");
 
-      const apiUrl = `https://rickandmortyapi.com/api/character/${randomNumber}/`;
-
-      function start() {
-        fetch(apiUrl)
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            console.log(randomNumber);
-            document.querySelector(
-              ".firstCardCharacterImg"
-            ).src = `${data.image}`;
-
-            document.querySelector(
-              ".firstCardNameHead"
-            ).innerHTML = `${data.name}`;
-            document.querySelector(
-              ".firstCarddeadOrAlive"
-            ).innerHTML = `${data.status}  - ${data.species}`;
-            document.querySelector(
-              ".firstCardLastLocation"
-            ).innerHTML = `${data.location.name}`;
-            document.querySelector(
-              ".firstCardFirstLocationSeen"
-            ).innerHTML = `${data.origin.name}`;
-          });
+        mainContent.innerHTML = cardsHTML;
       }
 
       start();
